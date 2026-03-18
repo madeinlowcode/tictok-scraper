@@ -1,0 +1,16 @@
+{
+  "actorSpecification": 1,
+  "name": "tiktok-scraper-pro",
+  "title": "TikTok Scraper Pro",
+  "description": "Unified TikTok scraper - 7 modules in 1 Actor. Profiles, videos, comments, hashtags, search, trending, sounds. Brazil focus with engagement metrics.",
+  "version": "1.0.0",
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile",
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1,
+      "title": "TikTok Data",
+      "description": "Scraped TikTok data including profiles, videos, comments, hashtags, trending items, and sounds"
+    }
+  }
+}

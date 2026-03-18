@@ -1,0 +1,58 @@
+{
+  "__DEFAULT_SCOPE__": {
+    "webapp.hashtag-detail": {
+      "challengeInfo": {
+        "challenge": {
+          "id": "5001",
+          "title": "coding",
+          "desc": "Share your coding projects!",
+          "coverLarger": "https://p16-sign.tiktokcdn.com/hashtag-cover.jpeg"
+        },
+        "stats": {
+          "viewCount": 50000000000,
+          "videoCount": 2000000
+        }
+      },
+      "itemList": [
+        {
+          "id": "7312345678901234567",
+          "desc": "Coding tutorial #coding",
+          "createTime": 1710700800,
+          "video": {
+            "duration": 60,
+            "cover": "https://p16-sign.tiktokcdn.com/cover1.jpeg",
+            "playAddr": ""
+          },
+          "stats": {
+            "diggCount": 10000,
+            "shareCount": 200,
+            "commentCount": 150,
+            "playCount": 300000,
+            "collectCount": 800
+          },
+          "author": {
+            "id": "6800000000000000002",
+            "uniqueId": "coder123",
+            "nickname": "Coder 123",
+            "avatarLarger": "https://p16-sign.tiktokcdn.com/avatar2.jpeg",
+            "verified": false
+          },
+          "music": {
+            "id": "7000000000000000002",
+            "title": "Lofi Beats",
+            "authorName": "ChillBeats",
+            "album": "Study Music",
+            "original": false,
+            "duration": 60,
+            "coverLarge": "https://p16-sign.tiktokcdn.com/music2.jpeg",
+            "playUrl": ""
+          },
+          "challenges": [
+            { "id": "5001", "title": "coding" }
+          ],
+          "isAd": false
+        }
+      ]
+    }
+  }
+}

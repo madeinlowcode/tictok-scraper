@@ -1,0 +1,44 @@
+{
+  "data": [
+    {
+      "id": "7312345678901234568",
+      "desc": "How to code in TypeScript",
+      "createTime": 1710600000,
+      "video": {
+        "duration": 45,
+        "cover": "https://p16-sign.tiktokcdn.com/search-cover.jpeg",
+        "playAddr": ""
+      },
+      "stats": {
+        "diggCount": 5000,
+        "shareCount": 100,
+        "commentCount": 80,
+        "playCount": 200000,
+        "collectCount": 400
+      },
+      "author": {
+        "id": "6800000000000000003",
+        "uniqueId": "tsdev",
+        "nickname": "TypeScript Dev",
+        "avatarLarger": "https://p16-sign.tiktokcdn.com/avatar3.jpeg",
+        "verified": false
+      },
+      "music": {
+        "id": "7000000000000000003",
+        "title": "Background Music",
+        "authorName": "BGM Studio",
+        "album": "Chill",
+        "original": false,
+        "duration": 45,
+        "coverLarge": "https://p16-sign.tiktokcdn.com/music3.jpeg",
+        "playUrl": ""
+      },
+      "challenges": [
+        { "id": "5002", "title": "typescript" }
+      ],
+      "isAd": false
+    }
+  ],
+  "has_more": false,
+  "cursor": "1"
+}

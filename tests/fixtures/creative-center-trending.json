@@ -1,0 +1,33 @@
+{
+  "data": {
+    "list": [
+      {
+        "hashtag_name": "fyp",
+        "rank": 1,
+        "rank_change": 0,
+        "view_count": 100000000000,
+        "publish_cnt": 50000000,
+        "is_new": false,
+        "trend_chart": [90, 92, 95, 93, 97, 99, 100]
+      },
+      {
+        "hashtag_name": "brasilnoTikTok",
+        "rank": 2,
+        "rank_change": 3,
+        "view_count": 5000000000,
+        "publish_cnt": 1200000,
+        "is_new": false,
+        "trend_chart": [40, 50, 55, 60, 70, 80, 95]
+      },
+      {
+        "hashtag_name": "newTrend2026",
+        "rank": 3,
+        "rank_change": 0,
+        "view_count": 200000000,
+        "publish_cnt": 50000,
+        "is_new": true,
+        "trend_chart": [0, 0, 10, 30, 60, 80, 100]
+      }
+    ]
+  }
+}

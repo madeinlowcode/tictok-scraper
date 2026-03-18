@@ -1,0 +1,42 @@
+{
+  "itemList": [
+    {
+      "id": "7312345678901234569",
+      "desc": "Another video from my profile",
+      "createTime": 1710500000,
+      "video": {
+        "duration": 15,
+        "cover": "https://p16-sign.tiktokcdn.com/profile-video.jpeg",
+        "playAddr": ""
+      },
+      "stats": {
+        "diggCount": 8000,
+        "shareCount": 150,
+        "commentCount": 90,
+        "playCount": 250000,
+        "collectCount": 600
+      },
+      "author": {
+        "id": "6800000000000000001",
+        "uniqueId": "testuser",
+        "nickname": "Test User",
+        "avatarLarger": "https://p16-sign.tiktokcdn.com/avatar.jpeg",
+        "verified": true
+      },
+      "music": {
+        "id": "7000000000000000004",
+        "title": "Trending Sound",
+        "authorName": "Popular Artist",
+        "album": "Hits 2026",
+        "original": false,
+        "duration": 15,
+        "coverLarge": "https://p16-sign.tiktokcdn.com/music4.jpeg",
+        "playUrl": ""
+      },
+      "challenges": [],
+      "isAd": false
+    }
+  ],
+  "hasMore": true,
+  "cursor": "1710500000"
+}

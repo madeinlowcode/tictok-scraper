@@ -1,0 +1,28 @@
+{
+  "__DEFAULT_SCOPE__": {
+    "webapp.user-detail": {
+      "userInfo": {
+        "user": {
+          "id": "6800000000000000001",
+          "secUid": "MS4wLjABAAAAsecuid123456789",
+          "uniqueId": "testuser",
+          "nickname": "Test User",
+          "signature": "Full-stack developer | Content creator",
+          "verified": true,
+          "privateAccount": false,
+          "avatarLarger": "https://p16-sign.tiktokcdn.com/avatar.jpeg",
+          "bioLink": {
+            "link": "https://testuser.dev"
+          },
+          "region": "BR"
+        },
+        "stats": {
+          "followerCount": 150000,
+          "followingCount": 500,
+          "heartCount": 3000000,
+          "videoCount": 120
+        }
+      }
+    }
+  }
+}

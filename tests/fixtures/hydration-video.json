@@ -1,0 +1,48 @@
+{
+  "__DEFAULT_SCOPE__": {
+    "webapp.video-detail": {
+      "itemInfo": {
+        "itemStruct": {
+          "id": "7312345678901234567",
+          "desc": "Testing TikTok scraper #coding #tech",
+          "createTime": 1710700800,
+          "video": {
+            "duration": 30,
+            "cover": "https://p16-sign.tiktokcdn.com/obj/cover.jpeg",
+            "playAddr": "https://v16-webapp.tiktok.com/video.mp4"
+          },
+          "stats": {
+            "diggCount": 15000,
+            "shareCount": 500,
+            "commentCount": 300,
+            "playCount": 500000,
+            "collectCount": 2000
+          },
+          "author": {
+            "id": "6800000000000000001",
+            "uniqueId": "testuser",
+            "nickname": "Test User",
+            "avatarLarger": "https://p16-sign.tiktokcdn.com/avatar.jpeg",
+            "verified": true
+          },
+          "music": {
+            "id": "7000000000000000001",
+            "title": "Original Sound",
+            "authorName": "testuser",
+            "album": "",
+            "original": true,
+            "duration": 30,
+            "coverLarge": "https://p16-sign.tiktokcdn.com/music-cover.jpeg",
+            "playUrl": "https://sf16-ies-music.tiktokcdn.com/music.mp3"
+          },
+          "challenges": [
+            { "id": "1001", "title": "coding" },
+            { "id": "1002", "title": "tech" }
+          ],
+          "isAd": false,
+          "locationCreated": "BR"
+        }
+      }
+    }
+  }
+}

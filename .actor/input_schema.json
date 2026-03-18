@@ -1,0 +1,85 @@
+{
+  "title": "TikTok Scraper Pro Input",
+  "description": "Configure what TikTok data to scrape. Supports URLs, profiles, hashtags, search queries, and trending.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "urls": {
+      "title": "TikTok URLs",
+      "type": "array",
+      "description": "List of TikTok URLs (videos, profiles, hashtags, sounds). Short URLs (vm.tiktok.com) are auto-resolved.",
+      "editor": "stringList",
+      "items": { "type": "string" }
+    },
+    "profiles": {
+      "title": "Profiles",
+      "type": "array",
+      "description": "List of TikTok usernames or @handles to scrape",
+      "editor": "stringList",
+      "items": { "type": "string" }
+    },
+    "hashtags": {
+      "title": "Hashtags",
+      "type": "array",
+      "description": "List of hashtags to scrape (without #)",
+      "editor": "stringList",
+      "items": { "type": "string" }
+    },
+    "searchQueries": {
+      "title": "Search Queries",
+      "type": "array",
+      "description": "Keywords to search on TikTok",
+      "editor": "stringList",
+      "items": { "type": "string" }
+    },
+    "maxResults": {
+      "title": "Max Results",
+      "type": "integer",
+      "description": "Maximum number of results per search query",
+      "default": 20,
+      "minimum": 1,
+      "maximum": 500
+    },
+    "maxVideos": {
+      "title": "Max Videos",
+      "type": "integer",
+      "description": "Maximum number of videos to scrape per profile/hashtag",
+      "default": 30,
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "maxComments": {
+      "title": "Max Comments",
+      "type": "integer",
+      "description": "Maximum number of comments to scrape per video",
+      "default": 100,
+      "minimum": 0,
+      "maximum": 5000
+    },
+    "region": {
+      "title": "Region",
+      "type": "string",
+      "description": "Region code for trending and localized results",
+      "default": "BR",
+      "enum": ["BR", "US", "GB", "DE", "FR", "ES", "IT", "JP", "KR", "IN", "MX", "AR", "CO", "PT", "CA", "AU"]
+    },
+    "includeTrending": {
+      "title": "Include Trending",
+      "type": "boolean",
+      "description": "Scrape trending hashtags for the selected region",
+      "default": false
+    },
+    "includeEngagement": {
+      "title": "Include Engagement Metrics",
+      "type": "boolean",
+      "description": "Calculate engagement metrics for scraped profiles",
+      "default": false
+    },
+    "includeComments": {
+      "title": "Include Comments",
+      "type": "boolean",
+      "description": "Scrape comments for videos found in profiles",
+      "default": false
+    }
+  }
+}
