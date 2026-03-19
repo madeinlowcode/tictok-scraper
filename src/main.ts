@@ -9,8 +9,10 @@ import { scrapeSearch } from './scrapers/search-scraper.js';
 import { scrapeTrending } from './scrapers/trending-scraper.js';
 import { scrapeSound } from './scrapers/sound-scraper.js';
 import { detectInputType, isShortUrl, resolveShortUrl, extractVideoId } from './utils/url-resolver.js';
+import { CookieManager } from './utils/cookie-manager.js';
+import { SignatureGenerator } from './utils/signature-generator.js';
 import { DEFAULT_REGION } from './config/constants.js';
-import type { ScraperInput } from './types/index.js';
+import type { ScraperInput, CookieStore, CookiePool } from './types/index.js';
 
 await Actor.init();
 
@@ -27,8 +29,29 @@ try {
 
   const proxyUrl = await proxyConfiguration?.newUrl();
 
+  // CookieStore backed by Apify KeyValueStore
+  const kvStore = await Actor.openKeyValueStore();
+  const cookieStore: CookieStore = {
+    async load(): Promise<CookiePool | null> {
+      return (await kvStore.getValue<CookiePool>('cookie-pool')) ?? null;
+    },
+    async save(pool: CookiePool): Promise<void> {
+      await kvStore.setValue('cookie-pool', pool);
+    },
+  };
+
+  const cookieManager = new CookieManager({ store: cookieStore });
+  await cookieManager.initialize();
+
+  const signatureGenerator = new SignatureGenerator({
+    cookieProvider: cookieManager,
+  });
+
   const webClient = new TikTokWebClient({ proxyUrl: proxyUrl ?? undefined });
-  const apiClient = new TikTokApiClient({ proxyUrl: proxyUrl ?? undefined });
+  const apiClient = new TikTokApiClient(
+    { proxyUrl: proxyUrl ?? undefined },
+    { cookieManager, signatureGenerator },
+  );
 
   const region = input.region ?? DEFAULT_REGION;
   const allResults: unknown[] = [];

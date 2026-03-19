@@ -282,6 +282,38 @@ export interface RawCommentListResponse {
 }
 
 // ============================================================
+// Cookie & Signature Types
+// ============================================================
+
+export interface CookieStore {
+  load(): Promise<CookiePool | null>;
+  save(pool: CookiePool): Promise<void>;
+}
+
+export interface CookieSetEntry {
+  cookies: Record<string, string>;
+  createdAt: number;
+  lastUsedAt: number;
+}
+
+export type CookiePool = CookieSetEntry[];
+
+export interface SignedUrlResult {
+  signedUrl: string;
+  requiresBrowserFallback: boolean;
+}
+
+export interface CookieProvider {
+  getSessionCookies(): Promise<Record<string, string>>;
+  refreshCookies(): Promise<void>;
+}
+
+export interface SignatureGeneratorConfig {
+  cookieProvider: CookieProvider;
+  msTokenTtlMs?: number;
+}
+
+// ============================================================
 // Input & Config Types
 // ============================================================
 
