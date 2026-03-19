@@ -1,6 +1,7 @@
 import { Actor, log } from 'apify';
 import { TikTokWebClient } from './clients/tiktok-web.js';
 import { TikTokApiClient } from './clients/tiktok-api.js';
+import { TikTokBrowserClient } from './clients/tiktok-browser.js';
 import { scrapeVideo } from './scrapers/video-scraper.js';
 import { scrapeProfile } from './scrapers/profile-scraper.js';
 import { scrapeComments } from './scrapers/comment-scraper.js';
@@ -15,6 +16,8 @@ import { DEFAULT_REGION } from './config/constants.js';
 import type { ScraperInput, CookieStore, CookiePool } from './types/index.js';
 
 await Actor.init();
+
+let browserClient: InstanceType<typeof TikTokBrowserClient> | null = null;
 
 try {
   const input = (await Actor.getInput()) as ScraperInput | null;
@@ -52,6 +55,7 @@ try {
     { proxyUrl: proxyUrl ?? undefined },
     { cookieManager, signatureGenerator },
   );
+  browserClient = new TikTokBrowserClient({ proxyUrl: proxyUrl ?? undefined });
 
   const region = input.region ?? DEFAULT_REGION;
   const allResults: unknown[] = [];
@@ -69,7 +73,7 @@ try {
 
         switch (inputType) {
           case 'video': {
-            const result = await scrapeVideo(webClient, url);
+            const result = await scrapeVideo(webClient, url, { browserClient });
             allResults.push(result);
             await Actor.charge({ eventName: 'video-scraped', count: 1 });
             break;
@@ -78,6 +82,7 @@ try {
             const result = await scrapeProfile(webClient, apiClient, url, {
               maxVideos: input.maxVideos ?? 30,
               includeEngagement: input.includeEngagement ?? false,
+              browserClient,
             });
             allResults.push(result);
             await Actor.charge({ eventName: 'profile-scraped', count: 1 });
@@ -86,6 +91,7 @@ try {
               for (const video of result.recentVideos.slice(0, 5)) {
                 const comments = await scrapeComments(apiClient, video.videoId, {
                   maxComments: input.maxComments ?? 50,
+                  browserClient,
                 });
                 allResults.push(...comments);
                 await Actor.charge({ eventName: 'comment-scraped', count: comments.length });
@@ -96,13 +102,14 @@ try {
           case 'hashtag': {
             const result = await scrapeHashtag(webClient, apiClient, url, {
               maxVideos: input.maxVideos ?? 30,
+              browserClient,
             });
             allResults.push(result);
             await Actor.charge({ eventName: 'hashtag-scraped', count: 1 });
             break;
           }
           case 'sound': {
-            const result = await scrapeSound(webClient, apiClient, url);
+            const result = await scrapeSound(webClient, apiClient, url, { browserClient });
             allResults.push(result);
             await Actor.charge({ eventName: 'sound-scraped', count: 1 });
             break;
@@ -124,6 +131,7 @@ try {
         const result = await scrapeProfile(webClient, apiClient, profileId, {
           maxVideos: input.maxVideos ?? 30,
           includeEngagement: input.includeEngagement ?? false,
+          browserClient,
         });
         allResults.push(result);
         await Actor.charge({ eventName: 'profile-scraped', count: 1 });
@@ -139,6 +147,7 @@ try {
       try {
         const result = await scrapeHashtag(webClient, apiClient, hashtag, {
           maxVideos: input.maxVideos ?? 30,
+          browserClient,
         });
         allResults.push(result);
         await Actor.charge({ eventName: 'hashtag-scraped', count: 1 });
@@ -154,6 +163,7 @@ try {
       try {
         const results = await scrapeSearch(apiClient, query, {
           maxResults: input.maxResults ?? 20,
+          browserClient,
         });
         allResults.push(...results);
         await Actor.charge({ eventName: 'search-result', count: results.length });
@@ -166,7 +176,7 @@ try {
   // Process trending
   if (input.includeTrending) {
     try {
-      const result = await scrapeTrending(apiClient, { region });
+      const result = await scrapeTrending(apiClient, { region, browserClient });
       allResults.push(result);
       await Actor.charge({ eventName: 'trending-item', count: result.items.length });
     } catch (error) {
@@ -185,5 +195,8 @@ try {
   log.error('Actor failed', { error: String(error) });
   throw error;
 } finally {
+  if (browserClient) {
+    await browserClient.dispose();
+  }
   await Actor.exit();
 }

@@ -10,8 +10,10 @@ import { withRetry } from '../utils/retry-handler.js';
 import { RateLimiter } from '../utils/rate-limiter.js';
 import { CookieManager } from '../utils/cookie-manager.js';
 import { SignatureGenerator } from '../utils/signature-generator.js';
+import { isTokenStoreValid } from '../utils/token-store.js';
 import type {
   ClientConfig,
+  TokenStore,
   RawVideoListResponse,
   RawCommentListResponse,
   RawSearchResponse,
@@ -30,6 +32,11 @@ export class TikTokApiClient {
   private readonly cookieManager: CookieManager;
   private readonly signatureGenerator: SignatureGenerator;
   private readonly maxRetries: number;
+  private tokenStore: TokenStore | null = null;
+
+  setTokenStore(store: TokenStore): void {
+    this.tokenStore = store;
+  }
 
   constructor(config: ClientConfig = {}, options?: { cookieManager?: CookieManager; signatureGenerator?: SignatureGenerator }) {
     this.proxyUrl = config.proxyUrl;
@@ -155,6 +162,11 @@ export class TikTokApiClient {
     const cookieHeader = Object.entries(cookies)
       .map(([name, value]) => `${name}=${value}`)
       .join('; ');
+
+    // Inject msToken from tokenStore if valid
+    if (this.tokenStore && isTokenStoreValid(this.tokenStore) && this.tokenStore.msToken) {
+      params = { ...params, msToken: this.tokenStore.msToken };
+    }
 
     // Sign the URL
     const { signedUrl, requiresBrowserFallback } =

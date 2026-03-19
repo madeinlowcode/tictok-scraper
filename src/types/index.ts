@@ -314,6 +314,27 @@ export interface SignatureGeneratorConfig {
 }
 
 // ============================================================
+// Token Store & Browser Types
+// ============================================================
+
+export interface TokenStore {
+  ttWebId?: string;
+  msToken?: string;
+  ttChainToken?: string;
+  ttwid?: string;
+  cookies: Record<string, string>;
+  extractedAt: number;
+}
+
+export interface TokenStoreOptions {
+  maxAgeMs?: number; // default 30 minutes
+}
+
+export interface BrowserClientOptions {
+  proxyUrl?: string;
+}
+
+// ============================================================
 // Input & Config Types
 // ============================================================
 

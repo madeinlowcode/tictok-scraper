@@ -1,12 +1,14 @@
 import type { TikTokWebClient } from '../clients/tiktok-web.js';
 import type { TikTokApiClient } from '../clients/tiktok-api.js';
-import type { HashtagOutput, VideoOutput } from '../types/index.js';
+import type { TikTokBrowserClient } from '../clients/tiktok-browser.js';
+import type { HashtagOutput } from '../types/index.js';
 import { parseHashtag } from '../parsers/hashtag-parser.js';
-import { parseVideo } from '../parsers/video-parser.js';
 import { cleanVideoOutput } from '../processors/data-cleaner.js';
+import { withFallback } from '../utils/with-fallback.js';
 
 interface HashtagScrapeOptions {
   maxVideos?: number;
+  browserClient?: TikTokBrowserClient;
 }
 
 export async function scrapeHashtag(
@@ -15,15 +17,26 @@ export async function scrapeHashtag(
   hashtag: string,
   options: HashtagScrapeOptions = {},
 ): Promise<HashtagOutput> {
-  const { maxVideos = 30 } = options;
+  const { maxVideos = 30, browserClient } = options;
 
-  // Layer 1: Fetch hashtag page for initial data
-  const rawHashtag = await webClient.fetchHashtag(hashtag);
-  const result = parseHashtag(rawHashtag);
+  const layers: Array<() => Promise<HashtagOutput>> = [
+    // Layer 1: HTTP hydration
+    async () => {
+      const rawHashtag = await webClient.fetchHashtag(hashtag);
+      return parseHashtag(rawHashtag);
+    },
+  ];
 
-  // If we need more videos than hydration provided, paginate via API
-  // Note: TikTok hashtag API pagination requires challenge ID
-  // For now, return what hydration provides
+  // Layer 3: Browser fallback
+  if (browserClient) {
+    layers.push(async () => {
+      const rawHashtag = await browserClient.fetchHashtag(hashtag);
+      return parseHashtag(rawHashtag);
+    });
+  }
+
+  const result = await withFallback(layers);
+
   if (result.videos.length > maxVideos) {
     result.videos = result.videos.slice(0, maxVideos);
   }

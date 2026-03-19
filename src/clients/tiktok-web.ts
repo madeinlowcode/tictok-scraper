@@ -8,7 +8,8 @@ import {
 } from '../extractors/hydration-extractor.js';
 import { withRetry } from '../utils/retry-handler.js';
 import { RateLimiter } from '../utils/rate-limiter.js';
-import type { ClientConfig, RawVideoData, RawProfileData, RawHashtagData, RawSoundData } from '../types/index.js';
+import { isTokenStoreValid, tokensToCookieHeader } from '../utils/token-store.js';
+import type { ClientConfig, TokenStore, RawVideoData, RawProfileData, RawHashtagData, RawSoundData } from '../types/index.js';
 
 function randomUserAgent(): string {
   return USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)]!;
@@ -18,11 +19,16 @@ export class TikTokWebClient {
   private readonly proxyUrl?: string;
   private readonly rateLimiter: RateLimiter;
   private readonly maxRetries: number;
+  private tokenStore: TokenStore | null = null;
 
   constructor(config: ClientConfig = {}) {
     this.proxyUrl = config.proxyUrl;
     this.maxRetries = config.maxRetries ?? 3;
     this.rateLimiter = new RateLimiter();
+  }
+
+  setTokenStore(store: TokenStore): void {
+    this.tokenStore = store;
   }
 
   async fetchProfile(username: string): Promise<RawProfileData> {
@@ -69,12 +75,18 @@ export class TikTokWebClient {
 
     return withRetry(
       async () => {
+        const headers: Record<string, string> = {
+          ...WEB_HEADERS,
+          'User-Agent': randomUserAgent(),
+        };
+
+        if (this.tokenStore && isTokenStoreValid(this.tokenStore)) {
+          headers['Cookie'] = tokensToCookieHeader(this.tokenStore);
+        }
+
         const response = await gotScraping({
           url,
-          headers: {
-            ...WEB_HEADERS,
-            'User-Agent': randomUserAgent(),
-          },
+          headers,
           proxyUrl: this.proxyUrl,
           throwHttpErrors: true,
         });
